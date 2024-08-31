@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Gallery</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #101820;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #f1c40f;
+        }
+        #search-container {
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            justify-content: center;
+        }
+        #search-input {
+            padding: 12px 20px;
+            width: 100%;
+            max-width: 400px;
+            background-color: #333;
+            border: 2px solid #444;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1em;
+            outline: none;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        #search-input:focus {
+            background-color: #444;
+            border-color: #f1c40f;
+        }
+        #video-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 1200px;
+            width: 100%;
+        }
+        .video-item {
+            width: 300px;
+            background-color: #222;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .video-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+        }
+        .video-item img {
+            width: 100%;
+            height: 169px;
+            object-fit: cover;
+            transition: opacity 0.3s;
+        }
+        .video-item:hover img {
+            opacity: 0.8;
+        }
+        .video-item h3 {
+            padding: 15px;
+            margin: 0;
+            text-align: center;
+            font-size: 1.2em;
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Video Gallery</h1>
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Search videos...">
+    </div>
+    <div id="video-container"></div>
+
+    <script>
+        const videos = [
+            { name: "Nature Scenery", url: "https://youtu.be/-qLQ10H9gfA?si=wn7cWMzyBmm8x9mL", thumbnail: "https://via.placeholder.com/300x169?text=Nature+Scenery" },
+            { name: "City Timelapse", url: "https://youtu.be/-qLQ10H9gfA?si=wn7cWMzyBmm8x9mL", thumbnail: "https://via.placeholder.com/300x169?text=City+Timelapse" },
+            { name: "Ocean Waves", url: "https://youtu.be/-qLQ10H9gfA?si=wn7cWMzyBmm8x9mL", thumbnail: "https://via.placeholder.com/300x169?text=Ocean+Waves" }
+        ];
+
+        const videoContainer = document.getElementById('video-container');
+        const searchInput = document.getElementById('search-input');
+
+        function createVideoElement(video) {
+            const videoItem = document.createElement('div');
+            videoItem.className = 'video-item';
+            videoItem.innerHTML = `
+                <img src="${video.thumbnail}" alt="${video.name}">
+                <h3>${video.name}</h3>
+            `;
+            videoItem.addEventListener('click', () => {
+                window.location.href = video.url;
+            });
+            return videoItem;
+        }
+
+        function displayVideos(videosToDisplay) {
+            videoContainer.innerHTML = '';
+            videosToDisplay.forEach(video => {
+                videoContainer.appendChild(createVideoElement(video));
+            });
+        }
+
+        searchInput.addEventListener('input', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredVideos = videos.filter(video => 
+                video.name.toLowerCase().includes(searchTerm)
+            );
+            displayVideos(filteredVideos);
+        });
+
+        // Initial display of all videos
+        displayVideos(videos);
+    </script>
+</body>
+</html>
