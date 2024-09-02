@@ -8,8 +8,8 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background: #121212; /* Dark background color */
-            color: #e0e0e0; /* Light text color */
+            background: #121212;
+            color: #e0e0e0;
             margin: 0;
             padding: 0;
             display: flex;
@@ -22,13 +22,13 @@
         h1 {
             font-size: 3em;
             margin: 40px 0;
-            color: #1e90ff; /* Bright blue color */
+            color: #1e90ff;
             text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
             transition: color 0.4s ease, text-shadow 0.4s ease, transform 0.4s ease;
             animation: fadeIn 1s ease-in-out;
         }
         h1:hover {
-            color: #00bfff; /* Lighter blue on hover */
+            color: #00bfff;
             text-shadow: 5px 5px 12px rgba(0, 0, 0, 0.9);
             transform: translateY(-5px) scale(1.1);
         }
@@ -47,8 +47,8 @@
             padding: 14px 24px;
             width: 100%;
             max-width: 500px;
-            background-color: #333; /* Darker input background */
-            border: 2px solid #444; /* Slightly lighter border */
+            background-color: #333;
+            border: 2px solid #444;
             border-radius: 12px;
             color: #ffffff;
             font-size: 1.1em;
@@ -57,8 +57,8 @@
             transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s, width 0.3s ease;
         }
         #search-input:focus {
-            background-color: #444; /* Lighter input background on focus */
-            border-color: #1e90ff; /* Bright blue border on focus */
+            background-color: #444;
+            border-color: #1e90ff;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
             width: 100%;
         }
@@ -74,7 +74,7 @@
         }
         .video-item {
             width: 320px;
-            background-color: #1e1e1e; /* Very dark card background */
+            background-color: #1e1e1e;
             border-radius: 12px;
             overflow: hidden;
             cursor: pointer;
@@ -108,12 +108,12 @@
             margin: 0;
             text-align: center;
             font-size: 1.4em;
-            background-color: #333; /* Darker background for text */
-            color: #1e90ff; /* Bright blue text */
+            background-color: #333;
+            color: #1e90ff;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
         .video-item:hover h3 {
-            background-color: #444; /* Slightly lighter dark background on hover */
+            background-color: #444;
             color: #ffffff;
         }
         .video-item::after {
@@ -130,10 +130,9 @@
         .video-item:hover::after {
             opacity: 1;
         }
-        /* Loading Spinner */
         .spinner {
-            border: 8px solid #333; /* Darker grey */
-            border-top: 8px solid #1e90ff; /* Bright blue */
+            border: 8px solid #333;
+            border-top: 8px solid #1e90ff;
             border-radius: 50%;
             width: 60px;
             height: 60px;
@@ -144,7 +143,50 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        /* Responsive Design */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #121212;
+            color: #e0e0e0;
+        }
+        .login-box {
+            background: #1e1e1e;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-box input {
+            width: calc(100% - 20px);
+            padding: 14px;
+            border: 2px solid #444;
+            border-radius: 12px;
+            background-color: #333;
+            color: #ffffff;
+            font-size: 1.1em;
+            outline: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+        .login-box button {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            background-color: #1e90ff;
+            color: #ffffff;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .login-box button:hover {
+            background-color: #00bfff;
+            transform: scale(1.05);
+        }
         @media (max-width: 768px) {
             #search-input {
                 max-width: 100%;
@@ -157,18 +199,46 @@
     </style>
 </head>
 <body>
-    <h1>Choose Movie Categories</h1>
-    <div id="search-container">
-        <input type="text" id="search-input" placeholder="Search videos...">
+    <div id="login-page" class="login-container">
+        <div class="login-box">
+            <h1>Enter Your Name</h1>
+            <input type="text" id="name-input" placeholder="Your name...">
+            <button onclick="login()">Submit</button>
+        </div>
     </div>
-    <div id="video-container">
-        <div class="spinner"></div>
+    <div id="main-page" style="display: none;">
+        <h1>Choose Movie Categories</h1>
+        <div id="search-container">
+            <input type="text" id="search-input" placeholder="Search videos...">
+        </div>
+        <div id="video-container">
+            <div class="spinner"></div>
+        </div>
     </div>
-
     <script>
+        function login() {
+            const nameInput = document.getElementById('name-input');
+            const name = nameInput.value.trim();
+            if (name) {
+                // Adjust the URL if your PHP file is in a subdirectory
+                fetch('saveName.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `name=${encodeURIComponent(name)}`
+                })
+                .then(response => response.text())
+                .then(() => {
+                    document.getElementById('login-page').style.display = 'none';
+                    document.getElementById('main-page').style.display = 'block';
+                    initializeMainPage();
+                })
+                .catch(error => console.error('Error saving name:', error));
+            }
+        }
+
         const videos = [
             { name: "Hollwood", url: "Hollwood.html", thumbnail: "OIP.jpeg" },
-            { name: "Hollwood(Hindi dubbed)", url: "Hollwood.html", thumbnail: "OIP.jpeg" },
+            { name: "Hollwood (Hindi dubbed)", url: "Hollwood.html", thumbnail: "OIP.jpeg" },
             { name: "Bollywood", url: "Bollywood.html", thumbnail: "Designer.png" },
             { name: "Anime", url: "anime.html", thumbnail: "https://wallpapercave.com/wp/wp5545486.jpg" },
         ];
@@ -206,10 +276,11 @@
             displayVideos(filteredVideos);
         });
 
-        // Simulate loading time
-        setTimeout(() => {
-            displayVideos(videos);
-        }, 500);
+        function initializeMainPage() {
+            setTimeout(() => {
+                displayVideos(videos);
+            }, 500);
+        }
     </script>
 </body>
 </html>
