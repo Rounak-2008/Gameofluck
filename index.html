@@ -143,48 +143,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.8);
-        }
-        .login-box {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-        .login-box input {
-            width: calc(100% - 20px);
-            padding: 14px;
-            border: 2px solid #444;
-            border-radius: 12px;
-            background-color: #333;
-            color: #ffffff;
-            font-size: 1.1em;
-            outline: none;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            margin-bottom: 20px;
-        }
-        .login-box button {
-            padding: 14px 28px;
-            border: none;
-            border-radius: 12px;
-            background-color: #1e90ff;
-            color: #ffffff;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-        .login-box button:hover {
-            background-color: #00bfff;
-            transform: scale(1.05);
-        }
         @media (max-width: 768px) {
             #search-input {
                 max-width: 100%;
@@ -197,14 +155,7 @@
     </style>
 </head>
 <body>
-    <div id="login-page" class="login-container">
-        <div class="login-box">
-            <h1>Enter Your Name</h1>
-            <input type="text" id="name-input" placeholder="Your name...">
-            <button onclick="login()">Submit</button>
-        </div>
-    </div>
-    <div id="main-page" style="display: none;">
+    <div id="main-page">
         <h1>Choose Movie Categories</h1>
         <div id="search-container">
             <input type="text" id="search-input" placeholder="Search videos...">
@@ -215,19 +166,15 @@
     </div>
 
     <script>
-        function login() {
-            const nameInput = document.getElementById('name-input');
-            const name = nameInput.value.trim();
-            if (name) {
-                // Store the name in localStorage
-                localStorage.setItem('userName', name);
-                document.getElementById('login-page').style.display = 'none';
-                document.getElementById('main-page').style.display = 'block';
-                initializeMainPage();
-            }
-        }
+        const videos = [
+            // Example video data
+        { "name": "Hollwood", "url": "Hollwood.html", "thumbnail": "OIP.jpeg" },
+        { "name": "Hollwood (Hindi dubbed)", "url": "Hollwood.html", "thumbnail": "OIP.jpeg" },
+        { "name": "Bollywood", "url": "Bollywood.html", "thumbnail": "Designer.png" },
+        { "name": "Anime", "url": "anime.html", "thumbnail": "https://wallpapercave.com/wp/wp5545486.jpg" }
 
-        const videos = [];
+            // Add more video data here
+        ];
 
         const videoContainer = document.getElementById('video-container');
         const searchInput = document.getElementById('search-input');
@@ -263,26 +210,12 @@
         });
 
         function initializeMainPage() {
-            const storedName = localStorage.getItem('userName');
-            if (storedName) {
-                console.log(`Welcome back, ${storedName}!`);
-            }
-            fetch('data.json')
-                .then(response => response.json())
-                .then(data => {
-                    videos.push(...data);
-                    displayVideos(videos);
-                })
-                .catch(error => console.error('Error loading data:', error));
+            displayVideos(videos);
         }
 
         // Simulate loading time
         setTimeout(() => {
-            if (!localStorage.getItem('userName')) {
-                document.getElementById('login-page').style.display = 'flex';
-            } else {
-                initializeMainPage();
-            }
+            initializeMainPage();
         }, 500);
     </script>
 </body>
