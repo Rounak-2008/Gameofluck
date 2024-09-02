@@ -145,18 +145,16 @@
         }
         .login-container {
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: #121212;
-            color: #e0e0e0;
+            background: rgba(0, 0, 0, 0.8);
         }
         .login-box {
-            background: #1e1e1e;
-            padding: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
             width: 100%;
             max-width: 400px;
             text-align: center;
@@ -215,33 +213,26 @@
             <div class="spinner"></div>
         </div>
     </div>
+
     <script>
         function login() {
             const nameInput = document.getElementById('name-input');
             const name = nameInput.value.trim();
             if (name) {
-                // Adjust the URL if your PHP file is in a subdirectory
-                fetch('saveName.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: `name=${encodeURIComponent(name)}`
-                })
-                .then(response => response.text())
-                .then(() => {
-                    document.getElementById('login-page').style.display = 'none';
-                    document.getElementById('main-page').style.display = 'block';
-                    initializeMainPage();
-                })
-                .catch(error => console.error('Error saving name:', error));
+                // Store the name in localStorage
+                localStorage.setItem('userName', name);
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('main-page').style.display = 'block';
+                initializeMainPage();
             }
         }
 
         const videos = [
-            { name: "Hollwood", url: "Hollwood.html", thumbnail: "OIP.jpeg" },
-            { name: "Hollwood (Hindi dubbed)", url: "Hollwood.html", thumbnail: "OIP.jpeg" },
-            { name: "Bollywood", url: "Bollywood.html", thumbnail: "Designer.png" },
-            { name: "Anime", url: "anime.html", thumbnail: "https://wallpapercave.com/wp/wp5545486.jpg" },
-        ];
+    { "name": "Hollwood", "url": "Hollwood.html", "thumbnail": "OIP.jpeg" },
+    { "name": "Hollwood (Hindi dubbed)", "url": "Hollwood.html", "thumbnail": "OIP.jpeg" },
+    { "name": "Bollywood", "url": "Bollywood.html", "thumbnail": "Designer.png" },
+    { "name": "Anime", "url": "anime.html", "thumbnail": "https://wallpapercave.com/wp/wp5545486.jpg" }
+];
 
         const videoContainer = document.getElementById('video-container');
         const searchInput = document.getElementById('search-input');
@@ -277,10 +268,27 @@
         });
 
         function initializeMainPage() {
-            setTimeout(() => {
-                displayVideos(videos);
-            }, 500);
+            const storedName = localStorage.getItem('userName');
+            if (storedName) {
+                console.log(`Welcome back, ${storedName}!`);
+            }
+            fetch('data.json')
+                .then(response => response.json())
+                .then(data => {
+                    videos.push(...data);
+                    displayVideos(videos);
+                })
+                .catch(error => console.error('Error loading data:', error));
         }
+
+        // Simulate loading time
+        setTimeout(() => {
+            if (!localStorage.getItem('userName')) {
+                document.getElementById('login-page').style.display = 'flex';
+            } else {
+                initializeMainPage();
+            }
+        }, 500);
     </script>
 </body>
 </html>
