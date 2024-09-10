@@ -1,0 +1,47 @@
+import { useState, useEffect } from 'react';
+
+const InstagramCookieGrabber = () => {
+  const [cookies, setCookies] = useState<string | null>(null);
+  const [history, setHistory] = useState<string | null>(null);
+
+  useEffect(() => {
+    const instagramCookies = document.cookie.split('; ').find(row => row.startsWith('instagram_'));
+    setCookies(instagramCookies);
+    const historyData = localStorage.getItem('instagram_history');
+    setHistory(historyData);
+  }, []);
+
+  const handleSendCookies = () => {
+    if (cookies || history) {
+      // You can send the cookies and history data to your server here
+      // For demonstration purposes, we'll just log it to the console
+      console.log('Cookies:', cookies);
+      console.log('History:', history);
+    }
+  };
+
+  return (
+    <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-4 text-center">Instagram Cookie Grabber</h1>
+      {cookies && (
+        <div className="mt-4 bg-gray-100 p-4 rounded">
+          <p className="text-gray-700">
+            Your Instagram cookie: {cookies}
+          </p>
+        </div>
+      )}
+      {history && (
+        <div className="mt-4 bg-gray-100 p-4 rounded">
+          <p className="text-gray-700">
+            Your Instagram history: {history}
+          </p>
+        </div>
+      )}
+      <button onClick={handleSendCookies} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+        Send Cookies and History
+      </button>
+    </div>
+  );
+};
+
+export default InstagramCookieGrabber;
